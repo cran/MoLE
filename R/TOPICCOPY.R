@@ -8,6 +8,9 @@ function(speakerID, proposition){
 		markers=markers[sample(nrow(markers)),]
 		markers$match=VMATCH(proposition$external[,grep('^D\\d',names(proposition$external))], markers[,grep('^D\\d',names(markers))])
 		if(!'extMarkerID'%in%names(proposition$verb)){
+			markers$collostruction=0
+			collostructions=speaker$collostructions$index[speaker$collostructions$index$N==proposition$external$ID,]
+			markers[markers$ID%in%collostructions$marker,]$collostruction=collostructions[na.omit(match(markers$ID, collostructions$marker)),]$frequency
 			markers=markers[order(CANDIDATESCORE(markers, type='verbMarker'), decreasing=TRUE),]
 			for (i in 1:nrow(markers)){
 				if(markers[i,]$match > (1-distinctiveness)){
@@ -25,6 +28,9 @@ function(speakerID, proposition){
 			markers$match=VMATCH(proposition$external[,grep('^D\\d',names(proposition$external))], markers[,grep('^D\\d',names(markers))])
 			markers$distractorMatch=0
 			markers[markers$person==proposition$external$person, ]$distractorMatch=VMATCH(proposition$internal[,grep('^D\\d',names(proposition$internal))], markers[markers$person==proposition$external$person,grep('^D\\d',names(markers))])
+			markers$collostruction=0
+			collostructions=speaker$collostructions$index[speaker$collostructions$index$N==proposition$external$ID,]
+			markers[markers$ID%in%collostructions$marker,]$collostruction=collostructions[na.omit(match(markers$ID, collostructions$marker)),]$frequency
 			markers=markers[order(CANDIDATESCORE(markers, type='verbMarker'), decreasing=TRUE),]
 			for (i in 1:nrow(markers)){
 				if(markers[i,]$match > (markers[i,]$distractorMatch + distinctiveness)){
@@ -40,6 +46,9 @@ function(speakerID, proposition){
 			markers$match=VMATCH(proposition$internal[,grep('^D\\d',names(proposition$internal))], markers[,grep('^D\\d',names(markers))])
 			markers$distractorMatch=0
 			markers[markers$person==proposition$internal$person, ]$distractorMatch=VMATCH(proposition$external[,grep('^D\\d',names(proposition$external))], markers[markers$person==proposition$internal$person,grep('^D\\d',names(markers))])
+			markers$collostruction=0
+			collostructions=speaker$collostructions$index[speaker$collostructions$index$N==proposition$internal$ID,]
+			markers[markers$ID%in%collostructions$marker,]$collostruction=collostructions[na.omit(match(markers$ID, collostructions$marker)),]$frequency
 			markers=markers[order(CANDIDATESCORE(markers, type='verbMarker'), decreasing=TRUE),]
 			for (i in 1:nrow(markers)){
 				if(markers[i,]$match > (markers[i,]$distractorMatch + distinctiveness)){

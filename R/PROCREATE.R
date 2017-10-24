@@ -50,8 +50,8 @@ function(speakerID, hearerID){
 				actor=data.frame(dimension=rep(1:length(distinctions), distinctions), value=values, yes=0, no=4, stringsAsFactors=FALSE),
 				undergoer=data.frame(dimension=rep(1:length(distinctions), distinctions), value=values, yes=0, no=4, stringsAsFactors=FALSE)
 			)	
-			offspring2$flag=offspring1$flag
-			offspring1$usageHistory$index=data.frame(role=rep(c('actor', 'undergoer'), each=3), person=rep(1:3, 2), yes=0, no=4, stringsAsFactors=FALSE); offspring2$index=offspring1$index	
+			offspring2$usageHistory$flag=offspring1$usageHistory$flag
+			offspring1$usageHistory$index=data.frame(role=rep(c('actor', 'undergoer'), each=3), person=rep(1:3, 2), yes=0, no=4, stringsAsFactors=FALSE); offspring2$usageHistory$index=offspring1$usageHistory$index	
 			offspring1$collostructions$SV=offspring1$collostructions$SV[-(1:nrow(offspring1$collostructions$SV)),]; offspring2$collostructions$SV=offspring2$collostructions$SV[-(1:nrow(offspring2$collostructions$SV)),]
 			offspring1$collostructions$OV=offspring1$collostructions$OV[-(1:nrow(offspring1$collostructions$OV)),]; offspring2$collostructions$OV=offspring2$collostructions$OV[-(1:nrow(offspring2$collostructions$OV)),]
 			offspring1$collostructions$flag=offspring1$collostructions$flag[-(1:nrow(offspring1$collostructions$flag)),]; offspring2$collostructions$flag=offspring2$collostructions$flag[-(1:nrow(offspring2$collostructions$flag)),]

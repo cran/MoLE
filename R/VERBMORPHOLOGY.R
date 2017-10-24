@@ -56,8 +56,9 @@ function(hearerID, analysis){
 				data=data[data$no < (data$yes + data$no)/log(data$yes + data$no),]
 				if(nrow(data)!=0){
 					role=data$role[MAX((data$yes + data$no)/log(data$yes + data$no), forceChoice=TRUE)]
-					if(role=='actor'){role=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'external', 'internal')}
-					if(role=='undergoer'){role=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'internal', 'external')}
+					actor=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'external', 'internal')
+					if(role=='actor'){role=ifelse(actor=='external', 'external', 'internal')}
+					if(role=='undergoer'){role=ifelse(actor=='external', 'internal', 'external')}
 				}
 				#single person pair
 				if(length(grep(analysis[v,]$verbMarkerPerson, analysis[targets,]$nounPerson))==1){	
@@ -162,8 +163,9 @@ function(hearerID, analysis){
 						#if relevant generalization is made
 						if(nrow(data)!=0){
 							role=data$role[MAX((data$yes + data$no)/log(data$yes + data$no), forceChoice=TRUE)]
-							if(role=='actor'){role=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'external', 'internal')}
-							if(role=='undergoer'){role=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'internal', 'external')}
+							actor=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'external', 'internal')
+							if(role=='actor'){role=ifelse(actor=='external', 'external', 'internal')}
+							if(role=='undergoer'){role=ifelse(actor=='external', 'internal', 'external')}
 							if(!role%in%analysis$role){analysis[targets,]$role==role}
 					}	}
 					#if no generalization is made and suffix is distinctive for role (e.g. in case of fusion of role-distinctive pronoun)

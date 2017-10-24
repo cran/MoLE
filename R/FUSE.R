@@ -37,5 +37,6 @@ function(agent){
 					rownames(agent$nouns)=1:nrow(agent$nouns)
 					graveyard$history[nrow(graveyard$history) + 1,]=c(agent$generation, 'new word', 'FUSE', new$ID, new$person, flag$N[i], flag$marker[i])
 	}	}	}	}
+graveyard <<- graveyard
 agent
 }

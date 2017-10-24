@@ -4,7 +4,7 @@ function(hearerID, analysis){
 	positions=grep('\\?|^verb$', analysis$role)
 	verb=hearer$verbs[hearer$verbs$ID==analysis[analysis$role=='verb',]$verbID,]
 	actor=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'external', 'internal')
-	undergoer=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'internal', 'external')
+	undergoer=ifelse(actor=='external', 'internal', 'external')
 	verbPosition=grep(grep('^verb$', analysis$role), positions)
 	if(sum(hearer$wordOrder$success)>8){	#n exceptions should minimally be 4(=8/ln(8)) for Yang
 		yangTopic=TRUE %in% hearer$topicPosition$success[hearer$topicPosition$position=='other'] < (sum(hearer$topicPosition$success)/log(sum(hearer$topicPosition$success)))

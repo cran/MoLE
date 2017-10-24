@@ -1,6 +1,6 @@
 CANDIDATESCORE <-
 function(lexicon, type='referringExpression'){
-	candidateScoring=world$candidateScoring; frequency=world$frequency; functionBlocking=world$functionBlocking; distinctiveness=world$distinctiveness; activationImpact=world$activationImpact; semanticWeightImpact=world$semanticWeightImpact; economyImpact=world$economyImpact; collostructionImpact=world$collostructionImpact
+	candidateScoring=world$candidateScoring; frequency=world$frequency; functionBlocking=world$functionBlocking; activationImpact=world$activationImpact; semanticWeightImpact=world$semanticWeightImpact; economyImpact=world$economyImpact; collostructionImpact=world$collostructionImpact
 	if(candidateScoring=='match'){candidateScore=lexicon$match}
 	if(candidateScoring=='semanticWeight'){candidateScore=1/lexicon$semanticWeight}	
 	if(candidateScoring=='economy'){candidateScore=1/lexicon$productionEffort}
@@ -23,9 +23,6 @@ function(lexicon, type='referringExpression'){
 	}	}	}
 	if(candidateScoring=='activation'){candidateScore=lexicon$activation}
 	if(candidateScoring=='all'){
-		if(type=='nounMarker'){lexicon$collostruction=lexicon$nounMarker}
-		if(type=='verbMarker'){lexicon$collostruction=lexicon$verbMarker}
-		if(type=='pronoun'){lexicon$collostruction=lexicon$argument}
 		candidateScore=lexicon$match + 
 			activationImpact*lexicon$activation +  	
 			collostructionImpact*RESCALE(lexicon$collostruction) +

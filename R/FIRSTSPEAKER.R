@@ -10,8 +10,8 @@ function(){
 		undergoer=data.frame(dimension=rep(1:length(distinctions), distinctions), value=values, yes=0, no=4, stringsAsFactors=FALSE)
 	)
 	usageHistory=list(
-		verbs=data.frame(matrix(0, nrow=0, ncol=length(grep('D\\d',names(verbs))) + 1, dimnames=list(NULL,c('verb',paste('D',1:9, sep='')))), stringsAsFactors=FALSE),
-		nouns=data.frame(matrix(0, nrow=0, ncol=length(grep('D\\d',names(nouns))) + 1, dimnames=list(NULL,c('noun',paste('D',1:9, sep='')))), stringsAsFactors=FALSE),
+		verbs=data.frame(matrix(0, nrow=0, ncol=length(grep('D\\d',names(verbs))) + 1, dimnames=list(NULL,c('verb',paste('D',1:length(distinctions), sep='')))), stringsAsFactors=FALSE),
+		nouns=data.frame(matrix(0, nrow=0, ncol=length(grep('D\\d',names(nouns))) + 1, dimnames=list(NULL,c('noun',paste('D',1:length(distinctions), sep='')))), stringsAsFactors=FALSE),
 		index=data.frame(role=rep(c('actor', 'undergoer'), each=3), person=rep(1:3, 2), yes=0, no=4, stringsAsFactors=FALSE),	
 		flag=flag
 	)

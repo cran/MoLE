@@ -17,7 +17,7 @@ function(speakerID, situation, actor=NULL, undergoer=NULL){
 		collostructions=speaker$collostructions$OV[speaker$collostructions$OV$O==undergoer$ID,]
 		verbs[verbs$ID%in%collostructions$V,]$collostruction=collostructions[na.omit(match(verbs$ID, collostructions$V)),]$frequency
 	}
-	verbOrder=order(CANDIDATESCORE(verbs, type='referringExpression'), decreasing=TRUE)
+	verbOrder=order(CANDIDATESCORE(verbs), decreasing=TRUE)
 	verb=''
 	if(nrow(situation) > 1){
 		verbDistractors=situation[situation$target==0,]

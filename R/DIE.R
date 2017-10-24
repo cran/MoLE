@@ -17,14 +17,10 @@ function(agentID){
 			graveyard$brains[[length(graveyard$brains)]]$collostructions$OV = graveyard$brains[[length(graveyard$brains)]]$collostructions$OV[graveyard$brains[[length(graveyard$brains)]]$collostructions$OV$frequency>10,] 
 			graveyard$brains[[length(graveyard$brains)]]$collostructions$index = graveyard$brains[[length(graveyard$brains)]]$collostructions$index[graveyard$brains[[length(graveyard$brains)]]$collostructions$index$frequency>10,] 
 			graveyard$brains[[length(graveyard$brains)]]$collostructions$flag = graveyard$brains[[length(graveyard$brains)]]$collostructions$flag[graveyard$brains[[length(graveyard$brains)]]$collostructions$flag$frequency>10,] 
-			save=table(graveyard$brains[[length(graveyard$brains)]]$flag$external$dimension); save=names(save[save==2])
-			graveyard$brains[[length(graveyard$brains)]]$flag$external = graveyard$brains[[length(graveyard$brains)]]$flag$external[graveyard$brains[[length(graveyard$brains)]]$flag$external$dimension%in%save,]
-			save=table(graveyard$brains[[length(graveyard$brains)]]$flag$internal$dimension); save=names(save[save==2])
-			graveyard$brains[[length(graveyard$brains)]]$flag$internal = graveyard$brains[[length(graveyard$brains)]]$flag$internal[graveyard$brains[[length(graveyard$brains)]]$flag$internal$dimension%in%save,]
-			save=table(graveyard$brains[[length(graveyard$brains)]]$flag$actor$dimension); save=names(save[save==2])
-			graveyard$brains[[length(graveyard$brains)]]$flag$actor = graveyard$brains[[length(graveyard$brains)]]$flag$actor[graveyard$brains[[length(graveyard$brains)]]$flag$actor$dimension%in%save,]
-			save=table(graveyard$brains[[length(graveyard$brains)]]$flag$undergoer$dimension); save=names(save[save==2])
-			graveyard$brains[[length(graveyard$brains)]]$flag$undergoer = graveyard$brains[[length(graveyard$brains)]]$flag$undergoer[graveyard$brains[[length(graveyard$brains)]]$flag$undergoer$dimension%in%save,]
+			save=table(graveyard$brains[[length(graveyard$brains)]]$usageHistory$flag$actor$dimension); save=names(save[save==2])
+			graveyard$brains[[length(graveyard$brains)]]$usageHistory$flag$actor = graveyard$brains[[length(graveyard$brains)]]$usageHistory$flag$actor[graveyard$brains[[length(graveyard$brains)]]$usageHistory$flag$actor$dimension%in%save,]
+			save=table(graveyard$brains[[length(graveyard$brains)]]$usageHistory$flag$undergoer$dimension); save=names(save[save==2])
+			graveyard$brains[[length(graveyard$brains)]]$usageHistory$flag$undergoer = graveyard$brains[[length(graveyard$brains)]]$usageHistory$flag$undergoer[graveyard$brains[[length(graveyard$brains)]]$usageHistory$flag$undergoer$dimension%in%save,]
 		}
 		population = population[-agentID]
 		cat(paste('\n', graveyard$summary[nrow(graveyard$summary),]$name,'died', '\n\n'))

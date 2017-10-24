@@ -7,6 +7,7 @@ function(agentID, meaning, success){
 	if(is.list(meaning)){
 		if(is.data.frame(meaning$verb)){
 			verbID=meaning$verb$ID
+			actor=ifelse(ACTOR(meaning$verb[,grep('Ext\\d',names(meaning$verb))], meaning$verb[,grep('Int\\d',names(meaning$verb))])==1, 'external', 'internal')
 			if(success==1){
 				agent$verbs[agent$verbs$ID==verbID,]$frequency=agent$verbs[agent$verbs$ID==verbID,]$frequency + 1
 				agent$verbs[agent$verbs$ID==verbID,]$recency=0
@@ -42,11 +43,13 @@ function(agentID, meaning, success){
 				}	}	}
 				if(is.data.frame(meaning$external)){
 					person=grep(meaning$external$person, agent$usageHistory$index$person)
-					semRole='actor'
+					actorScore=VMATCH(meaning$verb[,grep('^Ext', names(meaning$verb))], rep(1, length(distinctions)))
+					undergoerScore=VMATCH(meaning$verb[,grep('^Ext', names(meaning$verb))], rep(0, length(distinctions)))
+					semRole=ifelse(undergoerScore<actorScore, 'actor', 'undergoer')
 					if(meaning$verb$type=='twoPlace'){
-						if(ACTOR(meaning$verb[,grep('Ext\\d',names(meaning$verb))], meaning$verb[,grep('Int\\d',names(meaning$verb))])==2){
-							semRole='undergoer'
-					}	}
+						if(actor=='external'){semRole='actor'}
+						if(actor=='internal'){semRole='undergoer'}
+					}	
 					semRole2=grep(semRole,agent$usageHistory$index$role)
 					if('extMarker'%in%names(meaning$verb)){
 						agent$usageHistory$index[intersect(person, semRole2),]$yes=agent$usageHistory$index[intersect(person, semRole2),]$yes + 1
@@ -69,7 +72,7 @@ function(agentID, meaning, success){
 				}	}	}	
 				if(meaning$verb$type=='twoPlace' & is.data.frame(meaning$internal)){
 					person=grep(meaning$internal$person, agent$usageHistory$index$person)
-					semRole=ifelse(ACTOR(meaning$verb[,grep('Ext\\d',names(meaning$verb))], meaning$verb[,grep('Int\\d',names(meaning$verb))])==1, 'undergoer', 'actor')
+					semRole=ifelse(actor=='external', 'undergoer', 'actor')
  					semRole2=grep(semRole,agent$usageHistory$index$role)
 					if('intMarker'%in%names(meaning$verb)){
 						agent$usageHistory$index[intersect(person, semRole2),]$yes=agent$usageHistory$index[intersect(person, semRole2),]$yes + 1
@@ -92,7 +95,7 @@ function(agentID, meaning, success){
 			}	}	}	}
 			if(is.data.frame(meaning$external)){
 				subjectID=meaning$external$ID
-				macroRole=ifelse(ACTOR(meaning$verb[grep('Ext\\d',names(meaning$verb))], meaning$verb[grep('Int\\d',names(meaning$verb))])==1, 'actor', 'undergoer')
+				macroRole=ifelse(actor=='external', 'actor', 'undergoer')
 				if(meaning$external$topic==1){
 					if(grep('external', names(meaning))==1){agent$topicPosition[agent$topicPosition$position=='first',]$freq=agent$topicPosition[agent$topicPosition$position=='first',]$freq+1} 
 					if(grep('external', names(meaning))!=1){agent$topicPosition[agent$topicPosition$position=='other',]$freq=agent$topicPosition[agent$topicPosition$position=='other',]$freq+1} 
@@ -136,21 +139,27 @@ function(agentID, meaning, success){
 							agent$collostructions$flag[nrow(agent$collostructions$flag) + 1,]$marker=markerID
 							agent$collostructions$flag[nrow(agent$collostructions$flag),]$N=subjectID
 							agent$collostructions$flag[nrow(agent$collostructions$flag),]$frequency=1
-					}	}	
+						}	
+						markerV=intersect(grep(paste('^',markerID, '$', sep=''), agent$collostructions$SV$S),grep(paste('^',verbID, '$', sep=''), agent$collostructions$SV$V))
+						if(length(markerV)!=0){agent$collostructions$SV$frequency[markerV]=agent$collostructions$SV$frequency[markerV] + 1}
+						if(length(markerV)==0){
+							agent$collostructions$SV[nrow(agent$collostructions$SV) + 1,]$S=markerID
+							agent$collostructions$SV[nrow(agent$collostructions$SV),]$V=verbID
+							agent$collostructions$SV[nrow(agent$collostructions$SV),]$frequency=1
+					}	}
 					if(meaning$external$person==3 & commonGround==TRUE){
 						if(!meaning$external$ID%in%agent$commonGround){
 							agent$commonGround=c(agent$commonGround, meaning$external$ID)
 			}	}	}	}
 			if(meaning$verb$type=='twoPlace' & is.data.frame(meaning$internal)){
 				wordOrder=names(meaning); wordOrder=wordOrder[wordOrder!='target']
-				actor=ifelse(ACTOR(meaning$verb[grep('Ext\\d',names(meaning$verb))], meaning$verb[grep('Int\\d',names(meaning$verb))])==1, 'external', 'internal')
-				undergoer=ifelse(ACTOR(meaning$verb[grep('Ext\\d',names(meaning$verb))], meaning$verb[grep('Int\\d',names(meaning$verb))])==1, 'internal', 'external')
+				undergoer=ifelse(actor=='external', 'internal', 'external')
 				wordOrder=gsub(actor,'A',wordOrder); wordOrder=gsub(undergoer,'U',wordOrder); wordOrder=gsub('verb','V',wordOrder)
 				wordOrder=paste(wordOrder, collapse='')
 				agent$wordOrder[agent$wordOrder$order==wordOrder,]$freq=agent$wordOrder[agent$wordOrder$order==wordOrder,]$freq + 1
 				if(success==1){agent$wordOrder[agent$wordOrder$order==wordOrder,]$success=agent$wordOrder[agent$wordOrder$order==wordOrder,]$success + 1}
 				objectID=meaning$internal$ID
-				macroRole=ifelse(ACTOR(meaning$verb[grep('Ext\\d',names(meaning$verb))], meaning$verb[grep('Int\\d',names(meaning$verb))])==1, 'undergoer', 'actor')
+				macroRole=ifelse(undergoer=='internal', 'undergoer', 'actor')
 				if(meaning$internal$topic==1){
 					if(grep('internal', names(meaning))==1){agent$topicPosition[agent$topicPosition$position=='first',]$freq=agent$topicPosition[agent$topicPosition$position=='first',]$freq+1} 
 					if(grep('internal', names(meaning))!=1){agent$topicPosition[agent$topicPosition$position=='other',]$freq=agent$topicPosition[agent$topicPosition$position=='other',]$freq+1} 
@@ -194,17 +203,24 @@ function(agentID, meaning, success){
 							agent$collostructions$flag[nrow(agent$collostructions$flag) + 1,]$marker=markerID
 							agent$collostructions$flag[nrow(agent$collostructions$flag),]$N=objectID
 							agent$collostructions$flag[nrow(agent$collostructions$flag),]$frequency=1
+						}
+						markerV=intersect(grep(paste('^',markerID, '$', sep=''), agent$collostructions$OV$O),grep(paste('^',verbID, '$', sep=''), agent$collostructions$OV$V))
+						if(length(markerV)!=0){agent$collostructions$OV$frequency[markerV]=agent$collostructions$OV$frequency[markerV] + 1}
+						if(length(markerV)==0){
+							agent$collostructions$OV[nrow(agent$collostructions$OV) + 1,]$O=markerID
+							agent$collostructions$OV[nrow(agent$collostructions$OV),]$V=verbID
+							agent$collostructions$OV[nrow(agent$collostructions$OV),]$frequency=1
 					}	}
 					if(meaning$internal$person==3 & commonGround==TRUE){
 						if(!meaning$internal$ID%in%agent$commonGround){
 							agent$commonGround=c(agent$commonGround, meaning$internal$ID)
 	}	}	}	}	}	}
-	agent$nouns$activation=RESCALE(jitter(log((agent$nouns$frequency+1))/(agent$nouns$recency+1+recencyDamper), factor=activationNoise))	
-	agent$verbs$activation=RESCALE(jitter(log((agent$verbs$frequency+1))/(agent$verbs$recency+1+recencyDamper), factor=activationNoise))
 	if(success==1){
 		agent$usageHistory$verbs=unique(agent$usageHistory$verbs)
 		agent$usageHistory$nouns=unique(agent$usageHistory$nouns)
 	}
+	agent$nouns$activation=RESCALE(jitter(log((agent$nouns$frequency+1))/(agent$nouns$recency+1+recencyDamper), factor=activationNoise))
+	agent$verbs$activation=RESCALE(jitter(log((agent$verbs$frequency+1))/(agent$verbs$recency+1+recencyDamper), factor=activationNoise))
 	population[[agentID]]=agent
 population<<-population
 }

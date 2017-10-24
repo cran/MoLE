@@ -116,7 +116,8 @@ function(hearerID, analysis, situation){
 			if(external$person!=3){situation$externalMatch=ifelse(external$person==situation$personA, 1, -1)}
 		} else {situation$externalMatch=-1}
 		if(is.data.frame(internal)){	
-			if(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1){
+			actor=ifelse(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==1, 'external', 'internal')
+			if(actor=='external'){
 				if(internal$person==3){
 					candidates=situation$personU
 					if(sum(candidates==3, na.rm=TRUE)>1){situation$internalMatch=VMATCH(internal[,grep('^D\\d',names(internal))], situation[,grep('^U\\d',names(situation))])}
@@ -125,7 +126,7 @@ function(hearerID, analysis, situation){
 				}
 				if(internal$person!=3){situation$internalMatch=ifelse(internal$person==situation$personU, 1, -1)}
 			}
-			if(ACTOR(verb[,grep('^Ext\\d',names(verb))], verb[,grep('^Int\\d',names(verb))])==2){
+			if(actor=='internal'){
 				if(internal$person==3){
 					candidates=situation$personA
 					if(sum(candidates==3, na.rm=TRUE)>1){situation$internalMatch=VMATCH(internal[,grep('^D\\d',names(internal))], situation[,grep('^A\\d',names(situation))])}

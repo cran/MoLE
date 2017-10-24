@@ -40,5 +40,6 @@ function(agent){	#Cf. Heine en Kuteva p.39: freq is epiphenomenon of extension, 
 				agent$verbs[agent$verbs$ID==verb, grep('^Int\\d',names(agent$verbs))[MAX(vars, forceChoice=T)]]=NA
 				graveyard$history[nrow(graveyard$history) + 1,]=c(agent$generation, 'verb meaning dimension removed', 'VERBDESEMANTICIZATION', verb, '', '', '')
 	}	}	}	
+graveyard <<- graveyard
 agent
 }

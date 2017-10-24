@@ -18,7 +18,10 @@ function(n=world$nNouns, local=world$local){
 	nouns$activation=0
 	nouns$productionEffort=nchar(nouns$form)
 	nouns$semanticWeight=1
-	if(local==TRUE){nouns[MAX(VMATCH(rep(1, length(distinctions)), nouns[, grep('D\\d', names(nouns))]), 1:2, forceChoice=TRUE),]$person=1:2}
+	if(local==TRUE){
+		maxs=MAX(VMATCH(rep(1, length(distinctions)), nouns[, grep('D\\d', names(nouns))]), 1:2, forceChoice=TRUE)
+		nouns[maxs,]$person=1:2
+	}
 	if(cut==TRUE){nouns=nouns[1,]}
 nouns
 }

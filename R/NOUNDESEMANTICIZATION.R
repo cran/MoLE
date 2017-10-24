@@ -28,5 +28,6 @@ function(agent){	#Cf. Heine en Kuteva p.39: freq is epiphenomenon of extension, 
 				agent$nouns[agent$nouns$ID==noun,]$semanticWeight=(length(grep('^D\\d',names(agent$nouns)))-sum(is.na(agent$nouns[agent$nouns$ID==noun,grep('^D\\d',names(agent$nouns))])))/length(grep('^D\\d',names(agent$nouns)))
 				graveyard$history[nrow(graveyard$history) + 1,]=c(agent$generation, '(pro)noun meaning dimension removed', 'NOUNDESEMANTICIZATION', noun, '', '', '')
 	}	}	}
+graveyard <<- graveyard
 agent
 }

@@ -13,13 +13,8 @@ function(agent){
 		if(nrow(index2)!=0){
 			for(i in 1:nrow(index2)){
 				if(index2$person[i]!=nouns[nouns$ID==index2$N[i],]$person){
-					new=nouns[nouns$ID==index2$N[i],]
-					new$ID=max(nouns$ID) + 1
-					new$person=index2$person[i]
-					new$form=gsub('.$','',new$form)	#otherwise, source form would block future erosion
-					nouns=rbind(nouns, new)
-					rownames(nouns)=1:nrow(nouns)
-					graveyard$history[nrow(graveyard$history) + 1,]=c(agent$generation, 'new pro', 'PERSONUPDATE', new$ID, new$person, index2$N[i], '')
+					nouns[nouns$ID==index2$N[i],]$person=index2$person[i]
+					graveyard$history[nrow(graveyard$history) + 1,]=c(agent$generation, 'new pro', 'PERSONUPDATE', index2$N[i], index2$person[i], '', '')
 		}	}	}
 		#remove redundant local pronouns
 		localPros=nouns[nouns$person!=3 & nouns$argument>nouns$verbMarker & nouns$productionEffort>referenceThreshold,]
@@ -50,5 +45,6 @@ function(agent){
 		}	}	}	}	}
 		agent$nouns=nouns
 	}
+graveyard <<- graveyard
 agent
 }

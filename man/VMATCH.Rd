@@ -8,7 +8,7 @@ Compare vectors
 Compare vectors properly taking into account uniform vectors (with same values on all dimensions) and non-specified dimensions.
 }
 \usage{
-VMATCH(x, y, incomparable = 0)
+VMATCH(x, y, incomparable = 0, noise=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,6 +20,9 @@ vector (numeric or data frame/list) or set of vectors whose similarity to the ta
 }
   \item{incomparable}{
 Value to be returned for incomparable vectors, in which all dimension pairs contain underspecified values
+}
+  \item{noise}{
+logical for addition of noise to outcome (default is TRUE)
 }
 }
 \details{

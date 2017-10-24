@@ -19,7 +19,7 @@ function(speakerID, situation, verb=NULL){
 			collostructions=speaker$collostructions$SV[speaker$collostructions$SV$V==verb$ID,]
 			nouns[nouns$ID%in%collostructions$S,]$collostruction=collostructions[na.omit(match(nouns$ID, collostructions$S)),]$frequency
 	}	}
-	undergoerOrder=order(CANDIDATESCORE(nouns, type='referringExpression'), decreasing=TRUE)
+	undergoerOrder=order(CANDIDATESCORE(nouns), decreasing=TRUE)
 	if(personU==3){
 		if(nrow(situation) > 1){
 			undergoerDistractors=unique(distractors[distractors$personU==3,grep('^U\\d',names(distractors))])
@@ -36,7 +36,7 @@ function(speakerID, situation, verb=NULL){
 			undergoer=nouns[1,]
 	}	}	
 	if(!is.data.frame(undergoer)){undergoer=nouns[MAX(nouns$match, forceChoice=TRUE),]}	
-	names(undergoer)[grep('match',names(undergoer))]='referentMatch'
+	names(undergoer)[grep('match',names(undergoer))]='match'
 	undergoer$topic=ifelse(target$topic=='undergoer', 1, 0)
 undergoer
 }

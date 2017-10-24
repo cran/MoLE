@@ -31,7 +31,7 @@ function(speakerID, proposition){
 	}
 	if('marker'%in%names(proposition$external)){
 		if(nchar(external$marker)>erosionMax & (proposition$external$markerFrequency > reductionFrequencyThreshold | proposition$external$markerRecency <= reductionRecencyThreshold | proposition$external$markerCollostruction > reductionCollostructionThreshold)){
-			form=proposition$external$marker
+			form=gsub('(.*).','\\1',proposition$external$marker)
 			if(blocking==FALSE){proposition$external$marker=form}
 			if(blocking==TRUE){if(!form%in%speaker$nouns$form){proposition$external$marker=form}}
 	}	}
@@ -44,7 +44,7 @@ function(speakerID, proposition){
 		}
 		if('marker'%in%names(proposition$internal)){
 			if(nchar(internal$marker)>erosionMax & (proposition$internal$markerFrequency > reductionFrequencyThreshold | proposition$internal$markerRecency <= reductionRecencyThreshold | proposition$internal$markerCollostruction > reductionCollostructionThreshold)){
-				form=proposition$internal$marker
+				form=gsub('(.*).','\\1',proposition$internal$marker)
 				if(blocking==FALSE){proposition$internal$marker=form}
 				if(blocking==TRUE){if(!form%in%speaker$nouns$form){proposition$internal$marker=form}}
 	}	}	}

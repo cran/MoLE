@@ -8,11 +8,12 @@ function(speakerID, proposition, situation){
 	nounCandidates=nounCandidates[sample(nrow(nounCandidates)),]
 	verb=proposition$verb
 	external=proposition$external
-	if(ACTOR(verb[,grep('^Ext', names(verb))], verb[, grep('^Int', names(verb))])==1){
+	externalRole=ifelse(ACTOR(verb[,grep('^Ext', names(verb))], verb[, grep('^Int', names(verb))])==1, 'actor', 'undergoer')
+	if(externalRole=='actor'){
 		externalTarget=target[,grep('^A',names(target))]
 		externalDistractors=unique(distractors[,grep('^A',names(distractors))])
 	}
-	if(ACTOR(verb[,grep('^Ext', names(verb))], verb[, grep('^Int', names(verb))])==2){
+	if(externalRole=='undergoer'){
 		externalTarget=target[,grep('^U',names(target))]
 		externalDistractors=unique(distractors[,grep('^U',names(distractors))])
 	}
@@ -31,7 +32,7 @@ function(speakerID, proposition, situation){
 			if(nrow(nouns)>0){nouns$match=VMATCH(verb[,grep('^Ext', names(verb))], nouns); marker=0}	#match local pronoun with role and remove marker
 			if(nrow(nouns)==0){	#if there's no local pronominal paradigm yet, select prominent noun for local ref
 				nouns=nounCandidates[nounCandidates$person==3,]
-				nouns$match=VMATCH(external[,grep('D\\d', names(external))], nouns)	
+				nouns$match=VMATCH(rep(1, length(distinctions)), nouns)	
 		}	}
 		nouns$collostruction=0
 		collostructions=speaker$collostructions$SV[speaker$collostructions$SV$V==verb$ID,]
@@ -61,11 +62,11 @@ function(speakerID, proposition, situation){
 	}	
 	if(verb$type=='twoPlace'){
 		internal=proposition$internal
-		if(ACTOR(verb[,grep('^Ext', names(verb))], verb[, grep('^Int', names(verb))])==1){
+		if(externalRole=='actor'){
 			internalTarget=target[,grep('^U',names(target))]
 			internalDistractors=unique(distractors[,grep('^U',names(distractors))])
 		}
-		if(ACTOR(verb[,grep('^Ext', names(verb))], verb[, grep('^Int', names(verb))])==2){
+		if(externalRole=='undergoer'){
 			internalTarget=target[,grep('^A',names(target))]
 			internalDistractors=unique(distractors[,grep('^A',names(distractors))])
 		}
@@ -84,7 +85,7 @@ function(speakerID, proposition, situation){
 				if(nrow(nouns)>0){nouns$match=VMATCH(verb[,grep('^Int', names(verb))], nouns); marker=0}	
 				if(nrow(nouns)==0){	
 					nouns=nounCandidates[nounCandidates$person==3,]
-					nouns$match=VMATCH(internal[,grep('D\\d', names(internal))], nouns)	
+					nouns$match=VMATCH(rep(1, length(distinctions)), nouns)	
 			}	}
 			nouns$collostruction=0
 			collostructions=speaker$collostructions$OV[speaker$collostructions$OV$V==verb$ID,]
